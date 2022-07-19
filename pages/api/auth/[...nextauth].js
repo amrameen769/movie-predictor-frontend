@@ -1,7 +1,7 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 
-export default NextAuth({
+export const authOptions = {
     // Configure one or more authentication providers
     providers: [
         GoogleProvider({
@@ -24,4 +24,6 @@ export default NextAuth({
             return session
         },
     },
-})
+}
+
+export default NextAuth(authOptions)

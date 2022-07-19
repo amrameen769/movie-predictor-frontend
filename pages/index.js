@@ -1,8 +1,10 @@
 import Head from 'next/head'
-import {signIn} from "next-auth/react";
+import {getSession, signIn} from "next-auth/react";
 import {useSession} from "next-auth/react"
 import Launch from "../components/Launch";
 import Header from "../components/Header";
+import {unstable_getServerSession} from "next-auth";
+import {authOptions} from "./api/auth/[...nextauth]";
 
 export default function Home() {
     const {data: session} = useSession()
@@ -33,3 +35,19 @@ export default function Home() {
         </div>
     )
 }
+
+export async function getServerSideProps(context) {
+
+    const session = await unstable_getServerSession(
+        context.req,
+        context.res,
+        authOptions
+    );
+
+    return {
+        props: {
+            session
+        }
+    }
+}
+
