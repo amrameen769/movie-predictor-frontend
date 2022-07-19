@@ -5,7 +5,6 @@ import Launch from "../components/Launch";
 import Header from "../components/Header";
 import {unstable_getServerSession} from "next-auth";
 import {authOptions} from "./api/auth/[...nextauth]";
-
 export default function Home() {
     const {data: session} = useSession()
 

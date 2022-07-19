@@ -6,9 +6,21 @@ import {HomeIcon} from "@heroicons/react/solid";
 import {useSession, signOut, signIn} from "next-auth/react";
 import Image from "next/image";
 import mpLogo from "../public/mp_logo.png"
+import {useDispatch, useSelector} from "react-redux";
+import {setAccessData} from "../store/slices/authSlice";
 
 export default function Header() {
     const {data: session} = useSession();
+
+    const access_data = useSelector((state) => state.auth)
+
+    if (access_data.access_token === ""){
+        const dispatch = useDispatch()
+        dispatch(setAccessData({
+            access_token: session.user.access_token,
+            token_type: session.user.token_type
+        }))
+    }
 
     const router = useRouter();
     return (<div className="shadow-sm border-b bg-white sticky top-0 z-50">
