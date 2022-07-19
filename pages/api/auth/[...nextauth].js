@@ -1,5 +1,6 @@
 import NextAuth from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
+import {default as axios} from "axios";
 
 export const authOptions = {
     // Configure one or more authentication providers
@@ -20,7 +21,6 @@ export const authOptions = {
                 .join("")
                 .toLocaleLowerCase();
             session.user.uid = token.sub;
-
             return session
         },
     },
