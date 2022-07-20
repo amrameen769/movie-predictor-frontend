@@ -10,15 +10,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {setAccessData} from "../store/slices/authSlice";
 
 export default function Header() {
-    const {data: session} = useSession();
+    const user = useSelector((state) => state.auth.user)
 
-    const access_data = useSelector((state) => state.auth)
-
-    if (access_data.access_token === ""){
+    if (user && Object.keys(user).length === 0){
         const dispatch = useDispatch()
+        const {data: session} = useSession();
         dispatch(setAccessData({
-            access_token: session.user.access_token,
-            token_type: session.user.token_type
+            user: session.user
         }))
     }
 
@@ -61,7 +59,7 @@ export default function Header() {
             <div className="flex items-center justify-end space-x-2">
                 <HomeIcon onClick={() => router.push("/")} className="navBtn"/>
                 <MenuIcon className="h-6 md:hidden cursor-pointer"/>
-                {session ? (<>
+                { user?.access_token ? (<>
                     <div className="relative navBtn">
                         <PaperAirplaneIcon className="rotate-45"/>
                         <div
@@ -75,7 +73,7 @@ export default function Header() {
                     <div className="flex items-center">
                         <Image
                             onClick={signOut}
-                            src={session?.user?.image}
+                            src={user?.image}
                             alt="pro-pic"
                             className="rounded-full cursor-pointer"
                             objectFit="fill"
