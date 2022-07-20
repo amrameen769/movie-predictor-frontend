@@ -24,7 +24,7 @@ export default function Launch() {
     <>
       <div className={"container mx-auto"}>
         <h1 className={"pt-60 font-thin text-6xl min-w-min"}>
-          Welcome {loggedInUser.email}
+          Welcome {loggedInUser && loggedInUser.email}
         </h1>
         <div className={"container mx-auto max-h-screen"}>
           <Banner />
