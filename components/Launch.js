@@ -22,7 +22,7 @@ export default function Launch() {
     return (
         <>
             <div className={"container mx-auto"}>
-                <h1 className={"pt-60 font-thin text-6xl min-w-min"}>Welcome {loggedInUser.email}</h1>
+                <h1 className={"pt-60 font-thin text-6xl min-w-min"}>Welcome {loggedInUser && loggedInUser.email}</h1>
             </div>
         </>
     )
