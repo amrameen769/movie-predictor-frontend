@@ -8,6 +8,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { wrapper } from "../store/store";
 import { useDispatch, useSelector } from "react-redux";
 import { setAccessData } from "../store/slices/authSlice";
+import { backendUrl } from "../constants";
 export default function Home() {
     const { data: session } = useSession();
 
@@ -114,7 +115,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         session &&
             (await axios({
                 method: "post",
-                url: "http://localhost:8000/user/create",
+                url: backendUrl + "user/create",
                 data: {
                     username: session.user.username,
                     email: session.user.email,
@@ -125,7 +126,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     if (response.status === 201) {
                         await axios({
                             method: "post",
-                            url: "http://localhost:8000/auth/auth-token",
+                            url: backendUrl + "auth/auth-token",
                             headers: {
                                 "Content-Type":
                                     "application/x-www-form-urlencoded",
@@ -143,7 +144,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     if (error.response.status === 406) {
                         await axios({
                             method: "post",
-                            url: "http://localhost:8000/auth/auth-token",
+                            url: backendUrl + "auth/auth-token",
                             headers: {
                                 "Content-Type":
                                     "application/x-www-form-urlencoded",
