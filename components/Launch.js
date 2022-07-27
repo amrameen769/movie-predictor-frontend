@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { backendUrl } from "../constants";
 import Banner from "./Banner";
+import Row from "./Row";
 
 export default function Launch() {
     const user = useSelector((state) => state.auth.user);
@@ -24,6 +25,10 @@ export default function Launch() {
         <>
             <div className={"container mx-auto"}>
                     <Banner />
+                    <Row/>
+                    <Row/>
+                    <Row/>
+                    <Row/>
             </div>
         </>
     );
