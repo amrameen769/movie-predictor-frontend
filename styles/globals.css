@@ -10,4 +10,8 @@
     .btn {
         @apply h-7 hover:scale-125 cursor-pointer transition-all duration-150 ease-out
     }
+
+    .banner-row {
+        @apply h-36 m-2
+    }
 }
