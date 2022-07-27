@@ -1,29 +1,31 @@
-import {useSelector} from "react-redux";
-import {useEffect, useState} from "react";
-import {backendUrl} from "../constants";
+import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { backendUrl } from "../constants";
 
 export default function Launch() {
-    const user = useSelector(state => state.auth.user)
-    const axios = require("axios").default
-    const [loggedInUser, setLoggedInUser] = useState(null)
+    const user = useSelector((state) => state.auth.user);
+    const axios = require("axios").default;
+    const [loggedInUser, setLoggedInUser] = useState(null);
 
     useEffect(() => {
         axios({
-            url: backendUrl+"user/me",
+            url: backendUrl + "user/me",
             method: "GET",
             headers: {
-                "Authorization": "Bearer "+user.access_token
-            }
+                Authorization: "Bearer " + user.access_token,
+            },
         }).then(function (response) {
-            setLoggedInUser(response.data)
-        })
-    }, [user])
+            setLoggedInUser(response.data);
+        });
+    }, [user]);
 
     return (
         <>
             <div className={"container mx-auto"}>
-                <h1 className={"pt-60 font-thin text-6xl min-w-min"}>Welcome {loggedInUser && loggedInUser.email}</h1>
+                <h1 className={"pt-60 font-thin text-6xl min-w-min"}>
+                    Welcome
+                </h1>
             </div>
         </>
-    )
+    );
 }
