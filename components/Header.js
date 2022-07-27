@@ -75,11 +75,7 @@ export default function Header() {
                     {user?.access_token ? (
                         <>
                             <div className="relative navBtn">
-                                <PaperAirplaneIcon className="rotate-45"/>
-                                <div
-                                    className="absolute -top-1 -right-2 text-xs h-5 w-5 bg-red-500 rounded-full flex items-center justify-center animate-pulse text-white">
-                                    3
-                                </div>
+                                <PaperAirplaneIcon />
                             </div>
                             <PlusCircleIcon className="navBtn"/>
                             <HeartIcon className="navBtn"/>
