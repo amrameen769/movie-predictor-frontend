@@ -1,6 +1,6 @@
-import { getProviders, signIn as signIntoProvider } from "next-auth/react";
+import {getProviders, signIn as signIntoProvider} from "next-auth/react";
 
-function signIn({ providers }) {
+function signIn({providers}) {
     return (
         <>
             <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-56 px-14 text-center">

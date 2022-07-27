@@ -1,6 +1,6 @@
-import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
-import { backendUrl } from "../constants";
+import {useSelector} from "react-redux";
+import {useEffect, useState} from "react";
+import {backendUrl} from "../constants";
 import Banner from "./Banner";
 import Row from "./Row";
 
@@ -24,11 +24,11 @@ export default function Launch() {
     return (
         <>
             <div className={"container mx-auto"}>
-                    <Banner />
-                    <Row/>
-                    <Row/>
-                    <Row/>
-                    <Row/>
+                <Banner/>
+                <Row/>
+                <Row/>
+                <Row/>
+                <Row/>
             </div>
         </>
     );
