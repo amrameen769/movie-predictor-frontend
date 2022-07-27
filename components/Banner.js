@@ -3,7 +3,7 @@ import Image from "next/image";
 function Banner() {
   return (
     <>
-      <header className="bg-white object-contain h-96 bg-cover bg-inherit bg-[url('https://images7.alphacoders.com/857/thumb-1920-857340.jpg')]">
+      <div className="bg-white object-contain h-96 bg-cover bg-inherit bg-[url('https://images7.alphacoders.com/857/thumb-1920-857340.jpg')]">
         <div className="ml-8 pt-32 h-48">
           <h1 className="text-5xl font-extrabold pb-1">
             Avengers Infinity War
@@ -21,8 +21,11 @@ function Banner() {
             from threats too large for any one hero to handle, a new danger has
             emerged from the cosmic shadows: Thanos.
           </h1>
+          {/* <div className="h-28 bg-gradient-to-t from-gray-700 to-black-500">
+            ssss
+          </div> */}
         </div>
-      </header>
+      </div>
     </>
   );
 }
