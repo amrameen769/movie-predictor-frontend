@@ -4,6 +4,8 @@ import {backendUrl} from "../constants";
 import Banner from "./Banner";
 import Row from "./Row";
 import {setMoviesData} from "../store/slices/movieSlice";
+import useFetch from "../hooks/useFetch";
+import FeatureSelect from "./FeatureSelect";
 
 export default function Launch() {
     const user = useSelector((state) => state.auth.user);
@@ -14,6 +16,8 @@ export default function Launch() {
 
     const movies = useSelector(state => state.movies.movies )
     const recommended_movies = movies.recommended_movies;
+    const rating_counts = movies.rating_counts;
+    const preferences = movies.preferences;
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -26,36 +30,29 @@ export default function Launch() {
             },
         }).then(function (response) {
             setLoggedInUser(response.data);
-            setLoading(false)
         });
     }, [user]);
 
-    useEffect( () => {
-        setLoading(true)
-        if (movies && Object.keys(movies).length === 0) {
-            axios({
-                url: backendUrl + "ai/recommend/user",
-                method: "GET",
-                headers: {
-                    Authorization: "Bearer " + user.access_token,
-                },
-            }).then(function (response) {
-                dispatch(setMoviesData({
-                    movies: response.data
-                }))
-                setLoading(false)
-            })
-        }
+    useEffect(  () => {
+        (async () => {
+            setLoading(true)
+            const data = await useFetch(backendUrl + "ai/recommend/user", "get", user.access_token, null)
+            dispatch((setMoviesData({
+                movies: data
+            })))
+            setLoading(false)
+        })();
     } , [])
 
     return (
         <>
             {loading ? (
-                <div className={"block"}>
+                <div className={"block text-center mt-56"}>
                     <h1 className={"text-7xl"}>Loading...</h1>
                 </div>
             ) : (
             <div className={"container mx-auto flex flex-col"}>
+                {user.new_user || rating_counts && rating_counts < 100 ? (<div><FeatureSelect preferences={preferences} ratingCounts={rating_counts} /></div>) : (<></>) }
                 <Banner movie={recommended_movies && recommended_movies[0]}/>
                 <Row movies={movies && movies["recommended_movies"]}/>
             </div>

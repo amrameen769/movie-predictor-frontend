@@ -5,18 +5,24 @@ import { BellIcon } from '@heroicons/react/outline'
 import {backendUrl, tmdbImageUrl} from "../constants";
 import Rating from "react-rating";
 import {useDispatch, useSelector} from "react-redux";
+import useFetch from "../hooks/useFetch";
+import {setMoviesData} from "../store/slices/movieSlice";
 
 export default function Modal({show, movie}) {
     const [open, setOpen] = useState(false)
     const [rating, setRating] = useState(null)
+    const [loading, setLoading] = useState(false)
     const userId = useSelector(state => state.movies.movies.userId)
     const movie_rating = useSelector(state => state.movies.movies.ratings?.filter((rating) => rating && rating["movieId"] === movie["movieId"]))
+    const user = useSelector(state => state.auth.user)
+    const dispatch = useDispatch()
 
     const cancelButtonRef = useRef(null)
 
-    const updateRating = () => {
+    const updateRating = async () => {
         const axios = require("axios").default
-        axios({
+        setLoading(true)
+        await axios({
             url: backendUrl+"ai/add-rating",
             method: "post",
             data: {
@@ -25,10 +31,15 @@ export default function Modal({show, movie}) {
                 "rating": rating.toString(),
                 "timestamp": new Date()
             }
-        }).then(function (response) {
-            console.log(response.data["rating"])
+        }).then(async function (response) {
             setRating(response.data["rating"])
-            setOpen(false)
+            const data = await useFetch(backendUrl + "ai/recommend/user", "get", user.access_token)
+            dispatch((setMoviesData({
+                movies: data
+            })))
+            setLoading(false)
+            setRating(null)
+            // setOpen(false)
         })
     }
 
@@ -77,7 +88,7 @@ export default function Modal({show, movie}) {
                                             <div className="mt-2 overflow-hidden">
                                                 <img src={`${tmdbImageUrl + movie.movieDetails.poster_path}`} className={"h-52"}/>
                                                 <Rating onChange={(value) => setRating(value)} />
-                                                <h1 className={"text-lg"}>Your Current Rating: {rating === null ? movie_rating[0] && movie_rating[0]["rating"] : rating}</h1>
+                                                <h1 className={"text-lg"}>Your Current Rating: { loading ? "Loading..." : movie_rating[0] && movie_rating[0]["rating"]}</h1>
                                                 <h1 className={"text-lg"}>Updated Rating: {rating}</h1>
                                                 <p className="text-sm text-gray-500">
                                                     {movie.movieDetails.overview}
@@ -92,7 +103,7 @@ export default function Modal({show, movie}) {
                                         className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
                                         onClick={() => updateRating()}
                                     >
-                                        Rate Movie
+                                        {loading ? "Updating..." : "Rate Movie"}
                                     </button>
                                     <button
                                         type="button"
@@ -100,7 +111,7 @@ export default function Modal({show, movie}) {
                                         onClick={() => setOpen(false)}
                                         ref={cancelButtonRef}
                                     >
-                                        Cancel
+                                        Close
                                     </button>
                                 </div>
                             </Dialog.Panel>

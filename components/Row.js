@@ -10,7 +10,7 @@ function Row({movies}) {
                 <div className="flex overflow-y-hidden overflow-x-scroll h-max">
                     {movies && movies.map((movie, index) => (
                         <div key={index} className={"flex flex-col align-middle"}>
-                            {movie.movieDetails.poster_path === null ? (
+                            {movie.movieDetails.poster_path === null || movie.movieDetails.success === false? (
                                 <h2 className={"text-2xl w-2 banner-row"}>{movie.title}</h2>
                             ) : (<img alt={""} className={"banner-row"}
                                       src={`${tmdbImageUrl + movie.movieDetails.poster_path}`}/>)}
