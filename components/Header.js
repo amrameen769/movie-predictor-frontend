@@ -2,17 +2,17 @@ import {useRouter} from "next/router";
 import {
     HeartIcon,
     MenuIcon,
-    PaperAirplaneIcon,
-    PlusCircleIcon,
     SearchIcon,
     UserGroupIcon,
+    BellIcon
 } from "@heroicons/react/outline";
 import {HomeIcon} from "@heroicons/react/solid";
-import {signIn, signOut, useSession} from "next-auth/react";
+import {signIn, useSession} from "next-auth/react";
 import Image from "next/image";
 import mpLogo from "../public/mp_logo.png";
 import {useDispatch, useSelector} from "react-redux";
 import {setAccessData} from "../store/slices/authSlice";
+import ProfileDropDown from "./ProfileDropDown";
 
 export default function Header() {
     const user = useSelector((state) => state.auth.user);
@@ -26,14 +26,11 @@ export default function Header() {
             })
         );
     }
-
-    const router = useRouter();
     return (
         <div className="shadow-sm border-b bg-white sticky top-0 z-50">
             <div className="flex justify-between max-w-6xl mx-5 xl:mx-auto">
                 {/* Left */}
                 <div
-                    onClick={() => router.push("/")}
                     className="hidden relative w-24 lg:inline-flex"
                 >
                     <h1 className={"font-normal text-3xl min-w-max pt-2"}>
@@ -67,22 +64,16 @@ export default function Header() {
                 </div>
                 {/* Right */}
                 <div className="flex items-center justify-end space-x-2">
-                    <HomeIcon
-                        onClick={() => router.push("/")}
-                        className="navBtn"
-                    />
                     <MenuIcon className="h-6 md:hidden cursor-pointer"/>
                     {user?.access_token ? (
                         <>
                             <div className="relative navBtn">
-                                <PaperAirplaneIcon />
+                                <BellIcon />
                             </div>
-                            <PlusCircleIcon className="navBtn"/>
                             <HeartIcon className="navBtn"/>
                             <UserGroupIcon className="navBtn"/>
                             <div className="flex items-center">
                                 <Image
-                                    onClick={signOut}
                                     src={user?.image}
                                     alt="pro-pic"
                                     className="rounded-full cursor-pointer"
@@ -92,6 +83,7 @@ export default function Header() {
                                     height={40}
                                 />
                             </div>
+                            <ProfileDropDown />
                         </>
                     ) : (
                         <button className="font-semibold" onClick={signIn}>

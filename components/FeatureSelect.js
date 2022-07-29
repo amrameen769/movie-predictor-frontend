@@ -42,9 +42,9 @@ export default function FeatureSelect({ratingCounts, preferences}) {
     }
 
     const updatePreferences = async () => {
-        if (features === featureStack){
-            closeModal()
-        } else {
+        const diff1 = features.filter(genre => !featureStack.includes(genre))
+        const diff2 = featureStack.filter(genre => !features.includes(genre))
+        if (diff1.length > 0 || diff2.length > 0 ){
             setLoading(true)
             const data = await useFetch(backendUrl + "ai/add-user-preferences/" + user_id, "post", null, featureStack)
             setFeatureStack(await data["preferences"])
@@ -54,6 +54,8 @@ export default function FeatureSelect({ratingCounts, preferences}) {
                 movies: userdata
             })))
             setLoading(false)
+            closeModal()
+        } else {
             closeModal()
         }
     }

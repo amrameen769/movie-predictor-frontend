@@ -1,7 +1,8 @@
 /* This example requires Tailwind CSS v2.0+ */
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
-import { BellIcon } from '@heroicons/react/outline'
+import { BellIcon, StarIcon } from '@heroicons/react/outline'
+import {StarIcon as StarIconFilled} from "@heroicons/react/solid"
 import {backendUrl, tmdbImageUrl} from "../constants";
 import Rating from "react-rating";
 import {useDispatch, useSelector} from "react-redux";
@@ -87,9 +88,7 @@ export default function Modal({show, movie}) {
                                             </Dialog.Title>
                                             <div className="mt-2 overflow-hidden">
                                                 <img src={`${tmdbImageUrl + movie.movieDetails.poster_path}`} className={"h-52"}/>
-                                                <Rating onChange={(value) => setRating(value)} />
-                                                <h1 className={"text-lg"}>Your Current Rating: { loading ? "Loading..." : movie_rating[0] && movie_rating[0]["rating"]}</h1>
-                                                <h1 className={"text-lg"}>Updated Rating: {rating}</h1>
+                                                <Rating className={"mt-2"} emptySymbol={<StarIcon className={"h-7"} />} fullSymbol={<StarIconFilled className={"h-7 text-amber-300"} />} initialRating={rating || (movie_rating[0] && movie_rating[0]["rating"])} onChange={(value) => setRating(value)} />
                                                 <p className="text-sm text-gray-500">
                                                     {movie.movieDetails.overview}
                                                 </p>
