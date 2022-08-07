@@ -7,6 +7,16 @@ export const movieSlice = createSlice({
     reducers: {
         setMoviesData: (state, action) => {
             state.movies = action.payload.movies
+        },
+        setRatingData: (state, action) => {
+            const new_ratings = state.movies.ratings
+            const index = state.movies.ratings.findIndex(rating => rating.movieId === action.payload.movieId)
+
+            new_ratings[index] = action.payload.rating
+            state.movies = {
+                ...state.movies,
+                ratings: new_ratings
+            }
         }
     },
 
@@ -17,6 +27,6 @@ export const movieSlice = createSlice({
     }
 })
 
-export const {setMoviesData} = movieSlice.actions;
+export const {setMoviesData, setRatingData} = movieSlice.actions;
 
 export default movieSlice.reducer;

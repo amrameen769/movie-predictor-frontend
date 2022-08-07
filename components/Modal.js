@@ -7,7 +7,7 @@ import {backendUrl, tmdbImageUrl} from "../constants";
 import Rating from "react-rating";
 import {useDispatch, useSelector} from "react-redux";
 import useFetch from "../hooks/useFetch";
-import {setMoviesData} from "../store/slices/movieSlice";
+import {setMoviesData, setRatingData} from "../store/slices/movieSlice";
 
 export default function Modal({show, movie}) {
     const [open, setOpen] = useState(false)
@@ -21,6 +21,8 @@ export default function Modal({show, movie}) {
     const cancelButtonRef = useRef(null)
 
     const updateRating = async () => {
+        setLoading(true)
+
         const axios = require("axios").default
         setLoading(true)
         await axios({
@@ -34,13 +36,12 @@ export default function Modal({show, movie}) {
             }
         }).then(async function (response) {
             setRating(response.data["rating"])
-            const data = await useFetch(backendUrl + "ai/recommend/user", "get", user.access_token)
-            dispatch((setMoviesData({
-                movies: data
-            })))
+            dispatch(setRatingData({
+                rating: response.data,
+                movieId: movie.movieId
+            }))
             setLoading(false)
             setRating(null)
-            // setOpen(false)
         })
     }
 
