@@ -8,6 +8,7 @@ import Rating from "react-rating";
 import {useDispatch, useSelector} from "react-redux";
 import useFetch from "../hooks/useFetch";
 import {setMoviesData, setRatingData} from "../store/slices/movieSlice";
+import {default as axios} from "axios";
 
 export default function Modal({show, movie}) {
     const [open, setOpen] = useState(false)
@@ -21,28 +22,30 @@ export default function Modal({show, movie}) {
     const cancelButtonRef = useRef(null)
 
     const updateRating = async () => {
-        setLoading(true)
+        if (rating !== null){
+            setLoading(true)
 
-        const axios = require("axios").default
-        setLoading(true)
-        await axios({
-            url: backendUrl+"ai/add-rating",
-            method: "post",
-            data: {
-                "userId": userId.toString(),
-                "movieId": movie.movieId,
-                "rating": rating.toString(),
-                "timestamp": new Date()
-            }
-        }).then(async function (response) {
-            setRating(response.data["rating"])
-            dispatch(setRatingData({
-                rating: response.data,
-                movieId: movie.movieId
-            }))
-            setLoading(false)
-            setRating(null)
-        })
+            const axios = require("axios").default
+            setLoading(true)
+            await axios({
+                url: backendUrl+"ai/add-rating",
+                method: "post",
+                data: {
+                    "userId": userId.toString(),
+                    "movieId": movie.movieId,
+                    "rating": rating.toString(),
+                    "timestamp": new Date()
+                }
+            }).then(async function (response) {
+                setRating(response.data["rating"])
+                dispatch(setRatingData({
+                    rating: response.data,
+                    movieId: movie.movieId
+                }))
+                setLoading(false)
+                setRating(null)
+            })
+        }
     }
 
     return (
@@ -108,7 +111,7 @@ export default function Modal({show, movie}) {
                                     <button
                                         type="button"
                                         className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                                        onClick={() => setOpen(false)}
+                                        onClick={() => {setOpen(false); setRating(null)}}
                                         ref={cancelButtonRef}
                                     >
                                         Close
