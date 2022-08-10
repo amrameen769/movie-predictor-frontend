@@ -1,6 +1,7 @@
-import { getProviders, signIn as signIntoProvider } from "next-auth/react";
+import {getProviders, signIn as signIntoProvider} from "next-auth/react";
+import SignInNormal from "./SignInNormal";
 
-function signIn({ providers }) {
+function signIn({providers}) {
     return (
         <>
             <div className="flex flex-col items-center justify-center min-h-screen py-2 -mt-56 px-14 text-center">
@@ -8,7 +9,7 @@ function signIn({ providers }) {
                     Sign In to Movie Predictor
                 </h1>
                 <p className="font-xs italic">Educational Purposes Only.</p>
-                <div className="mt-40">
+                <div className="mt-28">
                     {Object.values(providers).map((provider) => (
                         <div key={provider.name}>
                             <button
@@ -24,6 +25,8 @@ function signIn({ providers }) {
                         </div>
                     ))}
                 </div>
+                {/*<h1 className={"text-2xl mt-6"}>Or</h1>*/}
+                {/*<SignInNormal />*/}
             </div>
         </>
     );

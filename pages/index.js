@@ -1,16 +1,16 @@
 import Head from "next/head";
-import { getSession, signIn } from "next-auth/react";
-import { useSession } from "next-auth/react";
+import {signIn, useSession} from "next-auth/react";
 import Launch from "../components/Launch";
 import Header from "../components/Header";
-import { unstable_getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
-import { wrapper } from "../store/store";
-import { useDispatch, useSelector } from "react-redux";
-import { setAccessData } from "../store/slices/authSlice";
-import { backendUrl } from "../constants";
+import {unstable_getServerSession} from "next-auth";
+import {authOptions} from "./api/auth/[...nextauth]";
+import {wrapper} from "../store/store";
+import {useDispatch, useSelector} from "react-redux";
+import {setAccessData} from "../store/slices/authSlice";
+import {backendUrl} from "../constants";
+
 export default function Home() {
-    const { data: session } = useSession();
+    const {data: session} = useSession();
 
     const user = useSelector((state) => state.auth.user);
 
@@ -31,12 +31,12 @@ export default function Home() {
                     name="description"
                     content="Movies you would like to watch!"
                 />
-                <link rel="icon" href="/mp_logo.png" />
+                <link rel="icon" href="/mp_logo.png"/>
             </Head>
-            {session && <Header />}
+            {session && <Header/>}
             <main className={"container mx-auto"}>
                 {session ? (
-                    <Launch />
+                    <Launch/>
                 ) : (
                     <div className="flex flex-col items-center min-h-screen">
                         <h1 className={"pt-60 font-thin text-6xl min-w-min"}>
@@ -113,51 +113,52 @@ export const getServerSideProps = wrapper.getServerSideProps(
         const axios = require("axios").default;
 
         session &&
-            (await axios({
-                method: "post",
-                url: backendUrl + "user/create",
-                data: {
-                    username: session.user.username,
-                    email: session.user.email,
-                    password: session.user.uid,
-                },
+        (await axios({
+            method: "post",
+            url: backendUrl + "user/create",
+            data: {
+                username: session.user.username,
+                email: session.user.email,
+                password: session.user.uid,
+            },
+        })
+            .then(async function (response) {
+                if (response.status === 201) {
+                    await axios({
+                        method: "post",
+                        url: backendUrl + "auth/auth-token",
+                        headers: {
+                            "Content-Type":
+                                "application/x-www-form-urlencoded",
+                        },
+                        data: `grant_type=password&username=${session.user.username}&password=${session.user.uid}`,
+                    }).then(async function (response) {
+                        session.user.access_token = await response.data
+                            .access_token;
+                        session.user.token_type = await response.data
+                            .token_type;
+                        session.user.new_user = true
+                    });
+                }
             })
-                .then(async function (response) {
-                    if (response.status === 201) {
-                        await axios({
-                            method: "post",
-                            url: backendUrl + "auth/auth-token",
-                            headers: {
-                                "Content-Type":
-                                    "application/x-www-form-urlencoded",
-                            },
-                            data: `grant_type=password&username=${session.user.username}&password=${session.user.uid}`,
-                        }).then(async function (response) {
-                            session.user.access_token = await response.data
-                                .access_token;
-                            session.user.token_type = await response.data
-                                .token_type;
-                        });
-                    }
-                })
-                .catch(async function (error) {
-                    if (error.response.status === 406) {
-                        await axios({
-                            method: "post",
-                            url: backendUrl + "auth/auth-token",
-                            headers: {
-                                "Content-Type":
-                                    "application/x-www-form-urlencoded",
-                            },
-                            data: `grant_type=password&username=${session.user.username}&password=${session.user.uid}`,
-                        }).then(async function (response) {
-                            session.user.access_token = await response.data
-                                .access_token;
-                            session.user.token_type = await response.data
-                                .token_type;
-                        });
-                    }
-                }));
+            .catch(async function (error) {
+                if (error.response.status === 406) {
+                    await axios({
+                        method: "post",
+                        url: backendUrl + "auth/auth-token",
+                        headers: {
+                            "Content-Type":
+                                "application/x-www-form-urlencoded",
+                        },
+                        data: `grant_type=password&username=${session.user.username}&password=${session.user.uid}`,
+                    }).then(async function (response) {
+                        session.user.access_token = await response.data
+                            .access_token;
+                        session.user.token_type = await response.data
+                            .token_type;
+                    });
+                }
+            }));
 
         return {
             props: {

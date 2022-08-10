@@ -1,8 +1,7 @@
 import thunk from "redux-thunk";
 import {configureStore} from "@reduxjs/toolkit";
 import authReducer from "./slices/authSlice"
-import {ThunkAction} from "redux-thunk";
-import {Action} from "@reduxjs/toolkit";
+import movieReducer from "./slices/movieSlice"
 import {createWrapper} from "next-redux-wrapper";
 
 const initialState = {}
@@ -11,7 +10,8 @@ const middleware = [thunk]
 
 const makeStore = () => configureStore({
     reducer: {
-        auth: authReducer
+        auth: authReducer,
+        movies: movieReducer
     },
     devTools: true,
     middleware
