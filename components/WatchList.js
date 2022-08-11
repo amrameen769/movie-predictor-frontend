@@ -22,15 +22,16 @@ export default function WatchList() {
         })();
     }, [])
 
-    const movieIds = watchlist.map(movie => { return movie.movieId})
+    const handleRemove = async (id) => {
+        let movieIds = [];
+        if (watchlist.length > 0) {
+            watchlist.forEach(watchListMovie => {
+                if(watchListMovie.movieId !== id ) movieIds.push(watchListMovie.movieId)
+            })
+        }
 
-    useEffect(() => {
-        (async  () => {
-            const data = await useFetch(backendUrl+"ai/update-watchlist/"+userId, "post", null, movieIds)
-        })();
-    })
+        const data = await useFetch(backendUrl + "ai/update-watchlist/" + userId, "post", null, movieIds)
 
-    const handleRemove = (id) => {
         dispatch(removeMovieFromWatchlist({movieId: id}))
     }
 

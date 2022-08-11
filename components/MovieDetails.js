@@ -19,11 +19,22 @@ export default function MovieDetails({show, movie, inWatchList}) {
     const movie_rating = useSelector(state => state.movies.movies.ratings?.filter((rating) => rating && rating["movieId"] === movie["movieId"]))
     const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch()
-    // const watchlist = useSelector(state => state.watchlist.watchlist)
+    const watchlist = useSelector(state => state.watchlist.watchlist)
 
     const cancelButtonRef = useRef(null)
 
     const handleAddToWatchList = async (id) => {
+        let movieIds = [];
+        if (watchlist.length > 0) {
+            watchlist.forEach(watchListMovie => {
+                movieIds.push(watchListMovie.movieId)
+            })
+        }
+
+        movieIds.push(id)
+
+        const data = await useFetch(backendUrl + "ai/update-watchlist/" + userId, "post", null, movieIds)
+
         dispatch(addMovieToWatchList({
             movie: movie
         }))
