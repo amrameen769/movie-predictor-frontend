@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {backendUrl} from "../constants";
 import Banner from "./Banner";
 import Row from "./Row";
-import {setMoviesData} from "../store/slices/movieSlice";
+import {setContentBasedData, setMoviesData} from "../store/slices/movieSlice";
 import useFetch from "../hooks/useFetch";
 import FeatureSelect from "./FeatureSelect";
 
@@ -16,6 +16,8 @@ export default function Launch() {
 
     const movies = useSelector(state => state.movies.movies )
     const recommended_movies = movies.recommended_movies;
+    const content_movies = useSelector(state => state.movies.content_movies )
+    // const recommended_content_movies = content_movies.recommended_movies;
     const rating_counts = movies.rating_counts;
     const preferences = movies.preferences;
     const dispatch = useDispatch()
@@ -44,6 +46,17 @@ export default function Launch() {
         })();
     } , [])
 
+    useEffect(() => {
+        (async () => {
+            if(preferences){
+                const contentBasedData = await useFetch(backendUrl+"ai/content-recommend?genres="+preferences["preferences"].join(" ").toLowerCase() + "&user_id=" + movies["userId"], "get", null, null)
+                dispatch(setContentBasedData({
+                    movies: contentBasedData
+                }))
+            }
+        })();
+    }, [preferences])
+
     return (
         <>
             {loading ? (
@@ -52,9 +65,10 @@ export default function Launch() {
                 </div>
             ) : (
             <div className={"container mx-auto flex flex-col"}>
-                {user.new_user || rating_counts && rating_counts < 100 ? (<div><FeatureSelect preferences={preferences} ratingCounts={rating_counts} /></div>) : (<></>) }
+                <FeatureSelect preferences={preferences} ratingCounts={rating_counts} />
                 <Banner movie={recommended_movies && recommended_movies[0]}/>
-                <Row movies={movies && movies["recommended_movies"]}/>
+                <Row movies={movies && movies["recommended_movies"]} title={"Movies for you..."} datatype={"collaborative"}/>
+                <Row movies={ content_movies && content_movies["recommended_movies"]} title={"Based on your preferences..."} datatype={"content"}/>
             </div>
         )}
         </>
