@@ -6,6 +6,7 @@ import Row from "./Row";
 import {setContentBasedData, setMoviesData} from "../store/slices/movieSlice";
 import useFetch from "../hooks/useFetch";
 import FeatureSelect from "./FeatureSelect";
+import WatchList from "./WatchList";
 
 export default function Launch() {
     const user = useSelector((state) => state.auth.user);
@@ -28,7 +29,7 @@ export default function Launch() {
             url: backendUrl + "user/me",
             method: "GET",
             headers: {
-                Authorization: "Bearer " + user.access_token,
+                Authorization: "Bearer " + user?.access_token,
             },
         }).then(function (response) {
             setLoggedInUser(response.data);
@@ -38,7 +39,7 @@ export default function Launch() {
     useEffect(  () => {
         (async () => {
             setLoading(true)
-            const data = await useFetch(backendUrl + "ai/recommend/user", "get", user.access_token, null)
+            const data = await useFetch(backendUrl + "ai/recommend/user", "get", user?.access_token, null)
             dispatch((setMoviesData({
                 movies: data
             })))
@@ -65,7 +66,10 @@ export default function Launch() {
                 </div>
             ) : (
             <div className={"container mx-auto flex flex-col"}>
-                <FeatureSelect preferences={preferences} ratingCounts={rating_counts} />
+                <div className={"grid grid-cols-2 sticky top-14 z-[50]"}>
+                    <FeatureSelect preferences={preferences} ratingCounts={rating_counts} />
+                    <WatchList />
+                </div>
                 <Banner movie={recommended_movies && recommended_movies[0]}/>
                 <Row movies={movies && movies["recommended_movies"]} title={"Movies for you..."} datatype={"collaborative"}/>
                 <Row movies={ content_movies && content_movies["recommended_movies"]} title={"Based on your preferences..."} datatype={"content"}/>

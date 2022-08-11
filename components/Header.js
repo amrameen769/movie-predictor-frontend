@@ -16,7 +16,7 @@ export default function Header() {
         const {data: session} = useSession();
         dispatch(
             setAccessData({
-                user: session.user,
+                user: session?.user,
             })
         );
     }

@@ -1,5 +1,4 @@
 import {tmdbImageUrl} from "../constants";
-import WatchList from "./WatchList";
 
 
 function Banner({movie}) {
@@ -13,9 +12,6 @@ function Banner({movie}) {
                         <h1 className="text-5xl font-extrabold pb-1">
                             {movie && movie.title}
                         </h1>
-                        <div className={"flex space-x-2 mt-2 mb-2"}>
-                            <WatchList/>
-                        </div>
                         <h1 className="w-96 leading-5 font-xs">
                             {movie && movie.movieDetails.overview}
                         </h1>

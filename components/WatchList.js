@@ -26,7 +26,7 @@ export default function WatchList() {
         let movieIds = [];
         if (watchlist.length > 0) {
             watchlist.forEach(watchListMovie => {
-                if(watchListMovie.movieId !== id ) movieIds.push(watchListMovie.movieId)
+                if (watchListMovie.movieId !== id) movieIds.push(watchListMovie.movieId)
             })
         }
 
@@ -37,15 +37,13 @@ export default function WatchList() {
 
     return (
         <>
-            <div className="">
-                <button
-                    type="button"
-                    onClick={() => setOpen(true)}
-                    className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                >
-                    Watchlist
-                </button>
-            </div>
+            <button
+                type="button"
+                onClick={() => setOpen(true)}
+                className="feature-btn cursor-pointer sticky top-14 z-50 bg-white"
+            >
+                Watchlist
+            </button>
             <Transition show={open} as={Fragment}>
                 <Dialog as="div" className="relative z-[70]" onClose={setOpen}>
                     <Transition.Child
@@ -77,7 +75,8 @@ export default function WatchList() {
                                             <div className="flex-1 overflow-y-auto py-6 px-4 sm:px-6">
                                                 <div className="flex items-start justify-between">
                                                     <Dialog.Title
-                                                        className="text-lg font-medium text-gray-900"> Watch List </Dialog.Title>
+                                                        className="text-lg font-medium text-gray-900"> Watch
+                                                        List </Dialog.Title>
                                                     <div className="ml-3 flex h-7 items-center">
                                                         <button
                                                             type="button"
