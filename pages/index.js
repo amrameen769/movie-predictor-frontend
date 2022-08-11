@@ -35,7 +35,7 @@ export default function Home() {
             </Head>
             {session && <Header/>}
             <main className={"container mx-auto"}>
-                {session ? (
+                {session && session.user.access_token !== null ? (
                     <Launch/>
                 ) : (
                     <div className="flex flex-col items-center min-h-screen">
@@ -104,7 +104,7 @@ export default function Home() {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) => async (context) => {
-        const session = await unstable_getServerSession(
+        let session = await unstable_getServerSession(
             context.req,
             context.res,
             authOptions
@@ -157,7 +157,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
                         session.user.token_type = await response.data
                             .token_type;
                     }).catch((error) => {
-                        session.user.error = error
+                        console.log(error.message)
+                        session.user.access_token = null
+                        session.user.token_type = null
                     })
                 }
             }));
