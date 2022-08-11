@@ -11,13 +11,14 @@ import {addMovieToWatchList} from "../store/slices/watchlistSlice";
 import useFetch from "../hooks/useFetch";
 import Link from "next/link";
 
-export default function MovieDetails({show, movie, inWatchList}) {
+export default function MovieDetails({show, movie, inWatchList, datatype}) {
     const [open, setOpen] = useState(false)
     const [rating, setRating] = useState(null)
     // const [inWatchlist, setInWatchList] = useState(false)
     const [loading, setLoading] = useState(false)
     const userId = useSelector(state => state.movies.movies.userId)
     const movie_rating = useSelector(state => state.movies.movies.ratings?.filter((rating) => rating && rating["movieId"] === movie["movieId"]))
+    const content_movie_rating = useSelector(state => state.movies.content_movies?.ratings?.filter((rating) => rating && rating["movieId"] === movie["movieId"]))
     const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch()
     const watchlist = useSelector(state => state.watchlist.watchlist)
@@ -60,7 +61,8 @@ export default function MovieDetails({show, movie, inWatchList}) {
                 setRating(response.data["rating"])
                 dispatch(setRatingData({
                     rating: response.data,
-                    movieId: movie.movieId
+                    movieId: movie.movieId,
+                    datatype: datatype
                 }))
                 setLoading(false)
                 setRating(null)
@@ -128,7 +130,7 @@ export default function MovieDetails({show, movie, inWatchList}) {
                                                             emptySymbol={<StarIcon className={"h-7"}/>}
                                                             fullSymbol={<StarIconFilled
                                                                 className={"h-7 text-amber-300"}/>}
-                                                            initialRating={rating || (movie_rating[0] && movie_rating[0]["rating"])}
+                                                            initialRating={rating || ((datatype === "content") ? (content_movie_rating[0] && content_movie_rating[0]["rating"]) : (movie_rating[0] && movie_rating[0]["rating"]))}
                                                             onChange={(value) => setRating(value)}/>
                                                     <p className="text-sm text-gray-500">
                                                         {movie.movieDetails.overview}
@@ -157,8 +159,11 @@ export default function MovieDetails({show, movie, inWatchList}) {
                                             Close
                                         </button>
                                         <Link href={{
-                                            pathname: "/forum/[movieId]",
-                                            query: {movieId: movie.movieId}
+                                            pathname: "/forum/[prediction]/[movieId]",
+                                            query: {
+                                                movieId: movie.movieId,
+                                                prediction: datatype
+                                            }
                                         }}>
                                             <button
                                                 type="button"

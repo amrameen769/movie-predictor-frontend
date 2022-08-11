@@ -3,7 +3,8 @@ import {Fragment, useState} from 'react'
 import useFetch from "../hooks/useFetch";
 import {backendUrl} from "../constants";
 import {useDispatch, useSelector} from "react-redux";
-import {setMoviesData} from "../store/slices/movieSlice";
+// import {setMoviesData} from "../store/slices/movieSlice";
+import {setContentBasedData} from "../store/slices/movieSlice";
 
 function FeatureButton({value, action, selected}) {
     const [select, setSelect] = useState(selected)
@@ -49,10 +50,14 @@ export default function FeatureSelect({ratingCounts, preferences}) {
             const data = await useFetch(backendUrl + "ai/add-user-preferences/" + user_id, "post", null, featureStack)
             setFeatureStack(await data["preferences"])
 
-            const userdata = await useFetch(backendUrl + "ai/recommend/user", "get", user.access_token)
-            dispatch((setMoviesData({
-                movies: userdata
-            })))
+            // const userdata = await useFetch(backendUrl + "ai/recommend/user" , "get", user.access_token)
+            // dispatch((setMoviesData({
+            //     movies: userdata
+            // })))
+            const contentBasedData = await useFetch(backendUrl+"ai/content-recommend?genres="+featureStack.join(" ").toLowerCase() + "&user_id=" + user_id, "get", null, null)
+            dispatch(setContentBasedData({
+                movies: contentBasedData
+            }))
             setLoading(false)
             closeModal()
         } else {
@@ -60,10 +65,7 @@ export default function FeatureSelect({ratingCounts, preferences}) {
         }
     }
     const genres = [
-        "Adventure",
-        "Funny",
-        "Thriller",
-        "Horror"
+        'Adventure', 'Animation', 'Children', 'Comedy', 'Fantasy', 'Romance', 'Drama', 'Action', 'Crime', 'Thriller', 'Horror', 'Mystery', 'Sci-Fi', 'War', 'Musical', 'Documentary', 'IMAX', 'Western', 'Film-Noir'
     ]
 
     return (
@@ -71,7 +73,7 @@ export default function FeatureSelect({ratingCounts, preferences}) {
 
             <div onClick={openModal} className={"feature-btn cursor-pointer mt-5"}>My Preferences</div>
             <Transition appear show={isOpen} as={Fragment}>
-                <Dialog as="div" className="relative z-10" onClose={closeModal}>
+                <Dialog as="div" className="relative z-[70]" onClose={closeModal}>
                     <Transition.Child
                         as={Fragment}
                         enter="ease-out duration-300"
@@ -107,7 +109,7 @@ export default function FeatureSelect({ratingCounts, preferences}) {
                                         <div>
                                             <p className={"font-bold"}>Genres</p>
                                             <div
-                                                className={"flex flex-row space-x-1 rounded-xl bg-blue-900/20 p-1 justify-between"}>
+                                                className={"grid grid-cols-3 gap-2 rounded-xl bg-blue-900/20 p-1 justify-between"}>
                                                 {genres && genres.map((genre, index) => (
                                                     <FeatureButton value={genre} selected={featureStack.includes(genre)}
                                                                    key={index} action={addValueToFeatureStack}/>
