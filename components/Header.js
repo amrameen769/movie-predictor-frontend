@@ -13,6 +13,7 @@ import mpLogo from "../public/mp_logo.png";
 import {useDispatch, useSelector} from "react-redux";
 import {setAccessData} from "../store/slices/authSlice";
 import ProfileDropDown from "./ProfileDropDown";
+import Search from "./Search";
 
 export default function Header() {
     const user = useSelector((state) => state.auth.user);
@@ -50,18 +51,9 @@ export default function Header() {
                 </div>
 
                 {/* Middle */}
-                <div className="max-w-xs">
-                    <div className="relative mt-1 p-3 rounded-md">
-                        <div className="absolute inset-y-0 pl-3 flex items-center pointer-events-none">
-                            <SearchIcon className="h-5 w-5 text-gray-500"/>
-                        </div>
-                        <input
-                            className="bg-gray-50 block w-full h-8 pl-10 sm:text-sm border-gray-300 rounded-md focus:ring-black focus:border-black"
-                            type="text"
-                            placeholder="Search"
-                        />
-                    </div>
-                </div>
+                {/*<div className="max-w-xs">*/}
+                {/*    <Search />*/}
+                {/*</div>*/}
                 {/* Right */}
                 <div className="flex items-center justify-end space-x-2">
                     <MenuIcon className="h-6 md:hidden cursor-pointer"/>

@@ -1,7 +1,10 @@
 import {tmdbImageUrl} from "../constants";
-import Modal from "./Modal";
+import MovieDetails from "./MovieDetails";
+import {useSelector} from "react-redux";
 
 function Row({movies}) {
+    const watchlist = useSelector(state => state.watchlist.watchlist)
+    const movieIds = watchlist.map(movie => { return movie.movieId})
 
     return (
         <>
@@ -14,7 +17,7 @@ function Row({movies}) {
                                 <h2 className={"text-2xl w-2 banner-row"}>{movie.title}</h2>
                             ) : (<img alt={""} className={"banner-row"}
                                       src={`${tmdbImageUrl + movie.movieDetails.poster_path}`}/>)}
-                            <Modal movie={movie}/>
+                            <MovieDetails movie={movie} inWatchList={movieIds.includes(movie.movieId)}/>
                         </div>
                     ))}
                 </div>
