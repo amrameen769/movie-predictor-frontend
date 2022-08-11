@@ -157,7 +157,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
                         session.user.token_type = await response.data
                             .token_type;
                     }).catch((error) => {
-                        console.log(error.message)
                         session.user.access_token = null
                         session.user.token_type = null
                     })
