@@ -29,7 +29,7 @@ export default function Launch() {
             url: backendUrl + "user/me",
             method: "GET",
             headers: {
-                Authorization: "Bearer " + user.access_token,
+                Authorization: "Bearer " + user?.access_token,
             },
         }).then(function (response) {
             setLoggedInUser(response.data);
@@ -39,7 +39,7 @@ export default function Launch() {
     useEffect(  () => {
         (async () => {
             setLoading(true)
-            const data = await useFetch(backendUrl + "ai/recommend/user", "get", user.access_token, null)
+            const data = await useFetch(backendUrl + "ai/recommend/user", "get", user?.access_token, null)
             dispatch((setMoviesData({
                 movies: data
             })))

@@ -1,6 +1,3 @@
-import {useState} from "react";
-import {default as axios} from "axios";
-
 export default async function useFetch(url, method, token = null, reqData = null) {
 
     const axios = require("axios").default
@@ -10,25 +7,31 @@ export default async function useFetch(url, method, token = null, reqData = null
     if (token !== null) {
         headers = {"Authorization": "Bearer " + token}
     }
-    if (method === "post" && reqData !== null){
+    if (method === "post" && reqData !== null) {
         await axios({
             url: url,
             method: method,
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+            },
             data: reqData
         }).then(async function (response) {
             data = await response.data
         })
     }
-    if (method === "get"){
+    if (method === "get") {
         await axios({
             url: url,
             method: method,
-            headers: headers,
+            headers: {
+                ...headers,
+                'Access-Control-Allow-Origin': '*'
+            },
         }).then(async function (response) {
             data = await response.data
         })
     }
 
-    if(data !== null) return data;
+    if (data !== null) return data;
     else return false
 }

@@ -7,20 +7,14 @@ import {useEffect, useState} from "react";
 import {EmojiHappyIcon} from "@heroicons/react/outline";
 import useFetch from "../../../hooks/useFetch";
 import {backendUrl} from "../../../constants";
+import Link from "next/link";
+import {ArrowLeftIcon} from "@heroicons/react/solid";
 
 export default function MovieForum() {
     const router = useRouter()
 
     const user = useSelector((state) => state.auth.user);
-    if (user && Object.keys(user).length === 0) {
-        return (
-            <div className={"text-center"}>
-                <h1 className={"font-bold text-2xl m-60"}>Please Login to Continue</h1>
-            </div>
-        )
-    } else {
-        const userId = useSelector((state) => state.movies?.movies?.userId)
-    }
+    const userId = useSelector((state) => state.movies?.movies?.userId)
 
     const [postComment, setPostComment] = useState("")
     const {movieId, prediction} = router.query
@@ -71,11 +65,12 @@ export default function MovieForum() {
                     name="description"
                     content="Movies you would like to watch!"
                 />
-                <link rel="icon" href="/public/mp_logo.png"/>
+                <link rel="icon" href="/mp_logo.png"/>
             </Head>
-            {user && <Header/>}
-            {currentMovie && (
+            {<Header/>}
+            {currentMovie ? (
                 <div className={"container mx-auto flex flex-col"}>
+                    <button className={"sticky top-14 z-[70] flex flex-row justify-center mt-3 border-0 p-2 rounded-xl bg-black text-white font-semibold hover:border-2 hover:bg-white hover:border-gray-600 hover:text-black transition-all duration-400 ease-out"} onClick={() => router.push("/")}><ArrowLeftIcon className={"h-7"}/><p className={"ml-3"}>Go back</p></button>
                     <Banner movie={currentMovie}/>
                     <div className={"mt-5 border rounded-lg border-black mb-5"}>
                         <h2 className={"pl-2 text-lg font-bold"}>Comments</h2>
@@ -104,6 +99,10 @@ export default function MovieForum() {
                             </button>
                         </form>
                     </div>
+                </div>
+            ) : (
+                <div className={"text-center"}>
+                    <h1 className={"font-bold text-2xl m-60"}>Please Login to Continue</h1>
                 </div>
             )}
         </>
