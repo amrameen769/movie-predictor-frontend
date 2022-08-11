@@ -9,6 +9,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {setRatingData} from "../store/slices/movieSlice";
 import {addMovieToWatchList} from "../store/slices/watchlistSlice";
 import useFetch from "../hooks/useFetch";
+import Link from "next/link";
 
 export default function MovieDetails({show, movie, inWatchList}) {
     const [open, setOpen] = useState(false)
@@ -155,6 +156,21 @@ export default function MovieDetails({show, movie, inWatchList}) {
                                         >
                                             Close
                                         </button>
+                                        <Link href={{
+                                            pathname: "/forum/[movieId]",
+                                            query: {movieId: movie.movieId}
+                                        }}>
+                                            <button
+                                                type="button"
+                                                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                                                onClick={() => {
+                                                    setOpen(false);
+                                                    setRating(null)
+                                                }}
+                                            >
+                                                Go to forum
+                                            </button>
+                                        </Link>
                                     </div>
                                 </Dialog.Panel>
                             </Transition.Child>

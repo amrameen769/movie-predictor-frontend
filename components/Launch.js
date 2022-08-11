@@ -52,7 +52,7 @@ export default function Launch() {
                 </div>
             ) : (
             <div className={"container mx-auto flex flex-col"}>
-                {user.new_user || rating_counts && rating_counts < 100 ? (<div><FeatureSelect preferences={preferences} ratingCounts={rating_counts} /></div>) : (<></>) }
+                <FeatureSelect preferences={preferences} ratingCounts={rating_counts} />
                 <Banner movie={recommended_movies && recommended_movies[0]}/>
                 <Row movies={movies && movies["recommended_movies"]}/>
             </div>

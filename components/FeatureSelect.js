@@ -18,7 +18,7 @@ function FeatureButton({value, action, selected}) {
 
 export default function FeatureSelect({ratingCounts, preferences}) {
     const features = preferences["preferences"]
-    let [isOpen, setIsOpen] = useState(true)
+    let [isOpen, setIsOpen] = useState(false)
     let [featureStack, setFeatureStack] = useState(features)
     const user_id = useSelector(state => state.movies.movies.userId)
     const dispatch = useDispatch()
@@ -44,7 +44,7 @@ export default function FeatureSelect({ratingCounts, preferences}) {
     const updatePreferences = async () => {
         const diff1 = features.filter(genre => !featureStack.includes(genre))
         const diff2 = featureStack.filter(genre => !features.includes(genre))
-        if (diff1.length > 0 || diff2.length > 0 ){
+        if (diff1.length > 0 || diff2.length > 0) {
             setLoading(true)
             const data = await useFetch(backendUrl + "ai/add-user-preferences/" + user_id, "post", null, featureStack)
             setFeatureStack(await data["preferences"])
@@ -68,9 +68,8 @@ export default function FeatureSelect({ratingCounts, preferences}) {
 
     return (
         <>
-            {ratingCounts < 100 && (
-                <div onClick={openModal} className={"feature-btn cursor-pointer"}>My Preferences</div>
-            )}
+
+            <div onClick={openModal} className={"feature-btn cursor-pointer mt-5"}>My Preferences</div>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-10" onClose={closeModal}>
                     <Transition.Child
