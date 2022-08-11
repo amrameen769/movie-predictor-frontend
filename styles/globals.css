@@ -16,6 +16,6 @@
     }
 
     .feature-btn {
-        @apply w-full border-2 text-center rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700 hover:bg-white
+        @apply w-full border-2 text-center rounded-lg py-2.5 text-sm font-medium leading-5 text-blue-700
     }
 }

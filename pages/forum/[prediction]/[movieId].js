@@ -9,9 +9,19 @@ import useFetch from "../../../hooks/useFetch";
 import {backendUrl} from "../../../constants";
 
 export default function MovieForum() {
-    const user = useSelector((state) => state.auth.user);
-    const userId = useSelector((state) => state.movies.movies.userId)
     const router = useRouter()
+
+    const user = useSelector((state) => state.auth.user);
+    if (user && Object.keys(user).length === 0) {
+        return (
+            <div className={"text-center"}>
+                <h1 className={"font-bold text-2xl m-60"}>Please Login to Continue</h1>
+            </div>
+        )
+    } else {
+        const userId = useSelector((state) => state.movies?.movies?.userId)
+    }
+
     const [postComment, setPostComment] = useState("")
     const {movieId, prediction} = router.query
     const [comments, setComments] = useState(null)
@@ -21,11 +31,11 @@ export default function MovieForum() {
 
     if (prediction === "content") {
         movieDict = useSelector((state) => {
-            return state.movies.content_movies.recommended_movies && state.movies.content_movies.recommended_movies.filter(movie => movie.movieId === movieId)
+            return state.movies?.content_movies?.recommended_movies && state.movies.content_movies.recommended_movies.filter(movie => movie.movieId === movieId)
         })
     } else {
         movieDict = useSelector((state) => {
-            return state.movies.movies.recommended_movies && state.movies.movies.recommended_movies.filter(movie => movie.movieId === movieId)
+            return state.movies?.movies?.recommended_movies && state.movies.movies.recommended_movies.filter(movie => movie.movieId === movieId)
         })
     }
 

@@ -8,7 +8,9 @@ export default function ProfileDropDown(){
                 <Menu.Item>
                     {({active}) => (
                         <button
-                            onClick={signOut}
+                            onClick={() => signOut({
+                                callbackUrl: `${window.location.origin}`
+                            })}
                             className={`${
                                 active ? 'bg-violet-500 text-white' : 'text-gray-900'
                             } group flex w-full items-center rounded-md px-2 py-2 text-sm`}

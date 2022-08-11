@@ -71,7 +71,7 @@ export default function FeatureSelect({ratingCounts, preferences}) {
     return (
         <>
 
-            <div onClick={openModal} className={"feature-btn cursor-pointer mt-5"}>My Preferences</div>
+            <div onClick={openModal} className={"feature-btn cursor-pointer sticky top-14 z-50 bg-white"}>My Preferences</div>
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="relative z-[70]" onClose={closeModal}>
                     <Transition.Child
