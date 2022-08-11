@@ -156,7 +156,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
                             .access_token;
                         session.user.token_type = await response.data
                             .token_type;
-                    });
+                    }).catch((error) => {
+                        session.user.error = error
+                    })
                 }
             }));
 
