@@ -1,10 +1,7 @@
 import {useRouter} from "next/router";
 import {
-    HeartIcon,
     MenuIcon,
-    SearchIcon,
     UserGroupIcon,
-    BellIcon
 } from "@heroicons/react/outline";
 import {HomeIcon} from "@heroicons/react/solid";
 import {signIn, useSession} from "next-auth/react";
@@ -59,10 +56,6 @@ export default function Header() {
                     <MenuIcon className="h-6 md:hidden cursor-pointer"/>
                     {user?.access_token ? (
                         <>
-                            <div className="relative navBtn">
-                                <BellIcon />
-                            </div>
-                            <HeartIcon className="navBtn"/>
                             <UserGroupIcon className="navBtn"/>
                             <div className="flex items-center">
                                 <Image

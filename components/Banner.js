@@ -13,12 +13,6 @@ function Banner({movie}) {
                             {movie && movie.title}
                         </h1>
                         <div className={"flex space-x-2 mt-2 mb-2"}>
-                            <button
-                                type="button"
-                                className="rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-                            >
-                                Play
-                            </button>
                             <WatchList />
                         </div>
                         <h1 className="w-96 leading-5 font-xs max-w-xs h-20">
