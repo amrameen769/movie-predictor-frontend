@@ -14,6 +14,7 @@ export default function Launch() {
     const [loggedInUser, setLoggedInUser] = useState(null);
     // const [recommendedMovies, setRecommendedMovies] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [contentLoading, setContentLoading] = useState(true)
 
     const movies = useSelector(state => state.movies.movies )
     const recommended_movies = movies.recommended_movies;
@@ -49,11 +50,13 @@ export default function Launch() {
 
     useEffect(() => {
         (async () => {
+            setContentLoading(true)
             if(preferences){
                 const contentBasedData = await useFetch(backendUrl+"ai/content-recommend?genres="+preferences["preferences"].join(" ").toLowerCase() + "&user_id=" + movies["userId"], "get", null, null)
                 dispatch(setContentBasedData({
                     movies: contentBasedData
                 }))
+                setContentLoading(false)
             }
         })();
     }, [preferences])
@@ -72,7 +75,13 @@ export default function Launch() {
                 </div>
                 <Banner movie={recommended_movies && recommended_movies[0]}/>
                 <Row movies={movies && movies["recommended_movies"]} title={"Movies for you..."} datatype={"collaborative"}/>
-                <Row movies={ content_movies && content_movies["recommended_movies"]} title={"Based on your preferences..."} datatype={"content"}/>
+                {contentLoading ? (
+                    <div className={"block text-center"}>
+                        <h1 className={"text-4xl"}>Loading...</h1>
+                    </div>
+                ) : (
+                    <Row movies={ content_movies && content_movies["recommended_movies"]} title={"Based on your preferences..."} datatype={"content"}/>
+                )}
             </div>
         )}
         </>

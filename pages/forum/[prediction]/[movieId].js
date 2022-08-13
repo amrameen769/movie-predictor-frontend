@@ -9,6 +9,7 @@ import useFetch from "../../../hooks/useFetch";
 import {backendUrl} from "../../../constants";
 import Link from "next/link";
 import {ArrowLeftIcon} from "@heroicons/react/solid";
+import WatchList from "../../../components/WatchList";
 
 export default function MovieForum() {
     const router = useRouter()
@@ -47,9 +48,11 @@ export default function MovieForum() {
 
     const sendComment = async (e) => {
         e.preventDefault();
+        const now = new Date();
         const commentData = {
             userId: userId,
-            comment: postComment
+            comment: postComment,
+            timestamp: now.toISOString()
         }
 
         const data = await useFetch(backendUrl + "ai/add-comment/" + movieId, "post", null, commentData)
@@ -67,9 +70,10 @@ export default function MovieForum() {
                 />
                 <link rel="icon" href="/mp_logo.png"/>
             </Head>
-            {<Header/>}
+            <Header/>
             {currentMovie ? (
                 <div className={"container mx-auto flex flex-col"}>
+                    <WatchList />
                     <button className={"sticky top-14 z-[70] flex flex-row justify-center mt-3 border-0 p-2 rounded-xl bg-black text-white font-semibold hover:border-2 hover:bg-white hover:border-gray-600 hover:text-black transition-all duration-400 ease-out"} onClick={() => router.push("/")}><ArrowLeftIcon className={"h-7"}/><p className={"ml-3"}>Go back</p></button>
                     <Banner movie={currentMovie}/>
                     <div className={"mt-5 border rounded-lg border-black mb-5"}>
@@ -83,7 +87,7 @@ export default function MovieForum() {
                                         {comment.comment}
                                     </p>
                                     <p className={"pr-5 text-sm"}>
-                                        {new Date(Date.parse(comment.timestamp)).toUTCString()}
+                                        {new Date(Date.parse(comment.timestamp)).toString()}
                                     </p>
                                 </div>
                             ))}
