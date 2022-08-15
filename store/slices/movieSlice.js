@@ -31,6 +31,9 @@ export const movieSlice = createSlice({
         },
         setContentBasedData: (state, action) => {
             state.content_movies = action.payload.movies
+        },
+        setPreferencesData: (state, action) => {
+            state.preferences = action.payload.preferences
         }
     },
 
@@ -41,6 +44,6 @@ export const movieSlice = createSlice({
     }
 })
 
-export const {setMoviesData, setRatingData, setContentBasedData} = movieSlice.actions;
+export const {setMoviesData, setRatingData, setContentBasedData, setPreferencesData} = movieSlice.actions;
 
 export default movieSlice.reducer;

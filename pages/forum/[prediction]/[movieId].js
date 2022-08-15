@@ -83,10 +83,10 @@ export default function MovieForum() {
                         <div className={"pl-2 mt-5"}>
                             {comments && comments.map((comment, index) => (
                                 <div key={index} className={"flex items-center space-x-2 mb-3"}>
-                                    <p className={"text-sm flex-1"}>
+                                    <p className={"text-sm flex-1 whitespace-pre-wrap"}>
                                         <span className={"font-bold"}>{comment.username}</span>
                                         {" "}
-                                        <p className={"text-sm whitespace-pre-wrap"}>{comment.comment}</p>
+                                        {comment.comment}
                                     </p>
                                     <p className={"pr-5 text-sm"}>
                                         {new Date(Date.parse(comment.timestamp)).toString()}

@@ -4,7 +4,7 @@ import useFetch from "../hooks/useFetch";
 import {backendUrl} from "../constants";
 import {useDispatch, useSelector} from "react-redux";
 // import {setMoviesData} from "../store/slices/movieSlice";
-import {setContentBasedData} from "../store/slices/movieSlice";
+import {setContentBasedData, setPreferencesData} from "../store/slices/movieSlice";
 
 function FeatureButton({value, action, selected}) {
     const [select, setSelect] = useState(selected)
@@ -49,6 +49,9 @@ export default function FeatureSelect({ratingCounts, preferences}) {
             setLoading(true)
             const data = await useFetch(backendUrl + "ai/add-user-preferences/" + user_id, "post", null, featureStack)
             setFeatureStack(await data["preferences"])
+            dispatch(setPreferencesData({
+                preferences: data
+            }))
 
             // const userdata = await useFetch(backendUrl + "ai/recommend/user" , "get", user.access_token)
             // dispatch((setMoviesData({

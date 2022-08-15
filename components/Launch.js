@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 import {backendUrl} from "../constants";
 import Banner from "./Banner";
 import Row from "./Row";
-import {setContentBasedData, setMoviesData} from "../store/slices/movieSlice";
+import {setContentBasedData, setMoviesData, setPreferencesData} from "../store/slices/movieSlice";
 import useFetch from "../hooks/useFetch";
 import FeatureSelect from "./FeatureSelect";
 import WatchList from "./WatchList";
@@ -21,7 +21,7 @@ export default function Launch() {
     const content_movies = useSelector(state => state.movies.content_movies )
     // const recommended_content_movies = content_movies.recommended_movies;
     const rating_counts = movies.rating_counts;
-    const preferences = movies.preferences;
+    const preferences = useSelector(state => state.movies.preferences)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -46,13 +46,26 @@ export default function Launch() {
             })))
             setLoading(false)
         })();
-    } , [])
+    } , [user])
+
+    useEffect(  () => {
+        if(user) {
+            (async () => {
+                setLoading(true)
+                const data = await useFetch(backendUrl + "ai/get-preferences", "get", user?.access_token, null)
+                dispatch((setPreferencesData({
+                    preferences: data
+                })))
+                setLoading(false)
+            })();
+        }
+    } , [user])
 
     useEffect(() => {
         (async () => {
             setContentLoading(true)
             if(preferences){
-                const contentBasedData = await useFetch(backendUrl+"ai/content-recommend?genres="+preferences["preferences"].join(" ").toLowerCase() + "&user_id=" + movies["userId"], "get", null, null)
+                const contentBasedData = await useFetch(backendUrl+"ai/content-recommend?genres="+preferences["preferences"].join(" ").toLowerCase() + "&user_id=" + preferences["userId"], "get", null, null)
                 dispatch(setContentBasedData({
                     movies: contentBasedData
                 }))
