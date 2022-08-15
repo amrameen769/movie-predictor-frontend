@@ -1,4 +1,4 @@
-import {useSelector, useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useEffect, useState} from "react";
 import {backendUrl} from "../constants";
 import Banner from "./Banner";
@@ -7,6 +7,7 @@ import {setContentBasedData, setMoviesData, setPreferencesData} from "../store/s
 import useFetch from "../hooks/useFetch";
 import FeatureSelect from "./FeatureSelect";
 import WatchList from "./WatchList";
+import {getSession} from "next-auth/react";
 
 export default function Launch() {
     const user = useSelector((state) => state.auth.user);
@@ -17,9 +18,9 @@ export default function Launch() {
     const [contentLoading, setContentLoading] = useState(true)
     const [collabLoading, setCollabLoading] = useState(true)
 
-    const movies = useSelector(state => state.movies.movies )
+    const movies = useSelector(state => state.movies.movies)
     const recommended_movies = movies.recommended_movies;
-    const content_movies = useSelector(state => state.movies.content_movies )
+    const content_movies = useSelector(state => state.movies.content_movies)
     // const recommended_content_movies = content_movies.recommended_movies;
     const rating_counts = movies.rating_counts;
     const preferences = useSelector(state => state.movies.preferences)
@@ -38,7 +39,7 @@ export default function Launch() {
         });
     }, [user]);
 
-    useEffect(  () => {
+    useEffect(() => {
         (async () => {
             setCollabLoading(true)
             const data = await useFetch(backendUrl + "ai/recommend/user", "get", user?.access_token, null)
@@ -47,10 +48,10 @@ export default function Launch() {
             })))
             setCollabLoading(false)
         })();
-    } , [])
+    }, [])
 
-    useEffect(  () => {
-        if(user) {
+    useEffect(() => {
+        if (user) {
             (async () => {
                 setLoading(true)
                 const data = await useFetch(backendUrl + "ai/get-preferences", "get", user?.access_token, null)
@@ -60,13 +61,13 @@ export default function Launch() {
                 setLoading(false)
             })();
         }
-    } , [user])
+    }, [user])
 
     useEffect(() => {
         (async () => {
             setContentLoading(true)
-            if(preferences){
-                const contentBasedData = await useFetch(backendUrl+"ai/content-recommend?genres="+preferences["preferences"].join(" ").toLowerCase() + "&user_id=" + preferences["userId"], "get", null, null)
+            if (preferences) {
+                const contentBasedData = await useFetch(backendUrl + "ai/content-recommend?genres=" + preferences["preferences"].join(" ").toLowerCase() + "&user_id=" + preferences["userId"], "get", null, null)
                 dispatch(setContentBasedData({
                     movies: contentBasedData
                 }))
@@ -82,22 +83,26 @@ export default function Launch() {
                     <h1 className={"text-7xl"}>Loading...</h1>
                 </div>
             ) : (
-            <div className={"container mx-auto flex flex-col"}>
-                <div className={"grid grid-cols-2 sticky top-14 z-[50]"}>
-                    <FeatureSelect preferences={preferences} ratingCounts={rating_counts} />
-                    <WatchList />
-                </div>
-                <Banner movie={recommended_movies && recommended_movies[0]}/>
-                <Row movies={movies && movies["recommended_movies"]} title={"Movies for you..."} datatype={"collaborative"}/>
-                {contentLoading ? (
-                    <div className={"block text-center"}>
-                        <h1 className={"text-4xl"}>Loading...</h1>
+                <div className={"container mx-auto flex flex-col"}>
+                    <div className={"grid grid-cols-2 sticky top-14 z-[50]"}>
+                        <FeatureSelect preferences={preferences} ratingCounts={rating_counts}/>
+                        <WatchList/>
                     </div>
-                ) : (
-                    <Row movies={ content_movies && content_movies["recommended_movies"]} title={"Based on your preferences..."} datatype={"content"}/>
-                )}
-            </div>
-        )}
+                    {contentLoading || collabLoading ? (
+                        <div className={"block text-center mt-56"}>
+                            <h1 className={"text-7xl"}>Loading...</h1>
+                        </div>
+                    ) : (
+                        <>
+                            <Banner movie={recommended_movies && recommended_movies[0]}/>
+                            <Row movies={movies && movies["recommended_movies"]} title={"Movies for you..."}
+                                 datatype={"collaborative"}/>
+                            <Row movies={content_movies && content_movies["recommended_movies"]}
+                                 title={"Based on your preferences..."} datatype={"content"}/>
+                        </>
+                    )}
+                </div>
+            )}
         </>
     );
 }
