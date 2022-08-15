@@ -1,5 +1,4 @@
 import {getProviders, signIn as signIntoProvider} from "next-auth/react";
-import SignInNormal from "./SignInNormal";
 
 function signIn({providers}) {
     return (
@@ -17,7 +16,7 @@ function signIn({providers}) {
                                 onClick={() =>
                                     signIntoProvider(provider.id, {
                                         callbackUrl: "/",
-                                    })
+                                    }, {prompt: "login"})
                                 }
                             >
                                 Sign in with {provider.name}

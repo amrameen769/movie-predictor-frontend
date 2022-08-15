@@ -79,7 +79,7 @@ export default function Launch() {
     return (
         <>
             {loading ? (
-                <div className={"block text-center mt-56"}>
+                <div className={"block text-center mt-5"}>
                     <h1 className={"text-7xl"}>Loading...</h1>
                 </div>
             ) : (
@@ -89,7 +89,7 @@ export default function Launch() {
                         <WatchList/>
                     </div>
                     {contentLoading || collabLoading ? (
-                        <div className={"block text-center mt-56"}>
+                        <div className={"block text-center mt-5"}>
                             <h1 className={"text-7xl"}>Loading...</h1>
                         </div>
                     ) : (
