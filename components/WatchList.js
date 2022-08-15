@@ -10,7 +10,7 @@ export default function WatchList() {
     const [open, setOpen] = useState(false)
 
     const watchlist = useSelector(state => state.watchlist.watchlist)
-    const userId = useSelector(state => state.movies.movies.userId)
+    const userId = useSelector(state => state.movies.preferences.userId)
     const dispatch = useDispatch()
 
     useEffect(() => {

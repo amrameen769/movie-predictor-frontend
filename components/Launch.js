@@ -15,6 +15,7 @@ export default function Launch() {
     // const [recommendedMovies, setRecommendedMovies] = useState(null)
     const [loading, setLoading] = useState(true)
     const [contentLoading, setContentLoading] = useState(true)
+    const [collabLoading, setCollabLoading] = useState(true)
 
     const movies = useSelector(state => state.movies.movies )
     const recommended_movies = movies.recommended_movies;
@@ -39,14 +40,14 @@ export default function Launch() {
 
     useEffect(  () => {
         (async () => {
-            setLoading(true)
+            setCollabLoading(true)
             const data = await useFetch(backendUrl + "ai/recommend/user", "get", user?.access_token, null)
             dispatch((setMoviesData({
                 movies: data
             })))
-            setLoading(false)
+            setCollabLoading(false)
         })();
-    } , [user])
+    } , [])
 
     useEffect(  () => {
         if(user) {
