@@ -5,13 +5,13 @@ import {getApp, getApps, initializeApp} from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyC3Rj-glT88QuqmQcX9y5eRwzi6WsfYZgw",
-    authDomain: "movie-pred.firebaseapp.com",
-    projectId: "movie-pred",
-    storageBucket: "movie-pred.appspot.com",
-    messagingSenderId: "406240210412",
-    appId: "1:406240210412:web:5ae3ad12e189882719a4c9"
-};
+    apiKey: "AIzaSyDc4Pvv0WUwbqOOBP212kM1jxJsUHt_RKo",
+    authDomain: "movie-predictor-b566f.firebaseapp.com",
+    projectId: "movie-predictor-b566f",
+    storageBucket: "movie-predictor-b566f.appspot.com",
+    messagingSenderId: "72281060338",
+    appId: "1:72281060338:web:0b2f743e3e4ed7f8fd716b"
+  };
 
 // Initialize Firebase
 const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);

@@ -2,7 +2,9 @@ export default async function useFetch(url, method, token = null, reqData = null
 
     const axios = require("axios").default
     let data = null
-    let headers = {}
+    let headers = {
+        'Access-Control-Allow-Origin': '*',
+    }
 
     if (token !== null) {
         headers = {"Authorization": "Bearer " + token}
@@ -11,9 +13,7 @@ export default async function useFetch(url, method, token = null, reqData = null
         await axios({
             url: url,
             method: method,
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-            },
+            headers,
             data: reqData
         }).then(async function (response) {
             data = await response.data
